@@ -9,9 +9,6 @@
       "distribution": "internal",
       "environment": "development",
       "channel": "development",
-      "env": {
-        "APP_ENV": "development"
-      },
       "android": {
         "buildType": "apk"
       },
@@ -23,9 +20,6 @@
       "distribution": "internal",
       "environment": "preview",
       "channel": "preview",
-      "env": {
-        "APP_ENV": "preview"
-      },
       "android": {
         "buildType": "apk"
       },
@@ -36,10 +30,7 @@
     "production": {
       "autoIncrement": true,
       "environment": "production",
-      "channel": "production",
-      "env": {
-        "APP_ENV": "production"
-      }
+      "channel": "production"
     }
   },
   "submit": {

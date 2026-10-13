@@ -39,8 +39,8 @@ deployments. У Expo/EAS створи середовища
 | Змінна | Development | Preview | Production |
 | --- | --- | --- | --- |
 | `APP_ENV` | `development` | `preview` | `production` |
-| `EXPO_PUBLIC_CONVEX_URL` | Convex dev URL | Convex preview URL | Convex production URL |
-| `CONVEX_DEPLOYMENT` | dev deployment | preview deployment | production deployment |
+| `EXPO_PUBLIC_CONVEX_URL` | Convex dev URL | same dev URL | Convex production URL |
+| `CONVEX_DEPLOYMENT` | dev deployment | same dev deployment | production deployment |
 
 `APP_ENV` уже налаштований для кожного EAS environment. Додай Convex URL та
 deployment ID після створення хмарних Convex deployments. `project:init`
@@ -80,6 +80,10 @@ Standalone Preview APK для внутрішнього тестування:
 npx eas-cli@latest build --platform android --profile preview
 ```
 
+Статус Preview build: [EAS Build 3244ed92](https://expo.dev/accounts/ewgen12/projects/rn-todo-list/builds/3244ed92-bb1a-46d4-97cd-9428d474e5d5).
+
+Сторінка Preview Build: [відкрити EAS Build](https://expo.dev/accounts/ewgen12/projects/rn-todo-list/builds/3244ed92-bb1a-46d4-97cd-9428d474e5d5).
+
 Production builds:
 
 ```bash
@@ -97,6 +101,10 @@ Preview Android профіль налаштований на APK і internal dis
 ```bash
 npx eas-cli@latest update --platform all --environment preview --channel preview --message "UI update"
 ```
+
+Опубліковане OTA-оновлення Preview: [EAS Update group](https://expo.dev/accounts/ewgen12/projects/rn-todo-list/updates/a2bd302e-2795-4a11-9a82-58f790ef7f93).
+
+Опубліковане OTA-оновлення Preview: [відкрити update group](https://expo.dev/accounts/ewgen12/projects/rn-todo-list/updates/a2bd302e-2795-4a11-9a82-58f790ef7f93).
 
 Закрий Preview App повністю та відкрий повторно, щоб перевірити OTA-оновлення.
 Нативні зміни потребують нової збірки; JavaScript та assets можуть оновлюватися
@@ -121,5 +129,5 @@ npm run typecheck
 
 ![Налаштування у темній темі](./screenshots/settings-dark.png)
 
-Після першого EAS build додай сюди посилання на Expo build page та скріншоти
-встановленого Preview APK.
+Після встановлення Preview APK додай сюди 1–2 скріншоти застосунку з
+пристрою або емулятора.
