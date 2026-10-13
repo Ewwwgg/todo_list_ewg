@@ -134,7 +134,7 @@ export default function Index() {
 
           {loading && todos.length === 0 ? (
             <View style={styles.loadingContainer}>
-              <ActivityIndicator size="large" color="#6366f1" />
+              <ActivityIndicator size="large" color="#D96F57" />
               <Text style={styles.loadingText}>Завантаження завдань...</Text>
             </View>
           ) : (
@@ -156,19 +156,29 @@ export default function Index() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#f4f5fa",
+    backgroundColor: "#F4EBDD",
   },
   keyboardView: {
     flex: 1,
     width: "100%",
     alignItems: "center",
+    paddingHorizontal: 14,
+    paddingVertical: 12,
   },
   card: {
     flex: 1,
     width: "100%",
     maxWidth: 640,
     overflow: "hidden",
-    backgroundColor: "#fff",
+    borderWidth: 1,
+    borderColor: "#EAD8C9",
+    borderRadius: 24,
+    backgroundColor: "#FFFCF7",
+    shadowColor: "#6B4B3E",
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.08,
+    shadowRadius: 14,
+    elevation: 2,
   },
   errorBanner: {
     flexDirection: "row",
@@ -179,19 +189,19 @@ const styles = StyleSheet.create({
     padding: 14,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: "#f5d7d5",
-    backgroundColor: "#fff8f7",
+    borderColor: "#F2C6B9",
+    backgroundColor: "#FFF2EC",
   },
   errorCopy: {
     flex: 1,
   },
   errorTitle: {
-    color: "#a83f43",
+    color: "#A5493A",
     fontSize: 14,
     fontWeight: "700",
   },
   errorDescription: {
-    color: "#81575a",
+    color: "#815A4D",
     fontSize: 12,
     lineHeight: 17,
     marginTop: 4,
@@ -200,10 +210,10 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 10,
     borderRadius: 8,
-    backgroundColor: "#f4e2e0",
+    backgroundColor: "#F8E0D6",
   },
   retryText: {
-    color: "#923b41",
+    color: "#A5493A",
     fontSize: 12,
     fontWeight: "700",
   },
@@ -214,7 +224,7 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   loadingText: {
-    color: "#77798c",
+    color: "#8A7770",
     fontSize: 14,
   },
 });

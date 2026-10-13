@@ -44,7 +44,7 @@ export function TodoForm({ onAdd, loading }: TodoFormProps) {
       <TextInput
         style={styles.input}
         placeholder="Що потрібно зробити?"
-        placeholderTextColor="#9698a8"
+        placeholderTextColor="#A88E80"
         value={text}
         onChangeText={setText}
         onSubmitEditing={() => void handleSubmit()}
@@ -80,12 +80,12 @@ const styles = StyleSheet.create({
     minWidth: 0,
     height: 48,
     borderWidth: 1,
-    borderColor: "#e7e8ef",
+    borderColor: "#E9D8CA",
     borderRadius: 12,
     paddingHorizontal: 14,
-    color: "#25263a",
+    color: "#43352E",
     fontSize: 15,
-    backgroundColor: "#fff",
+    backgroundColor: "#FFF9F2",
   },
   button: {
     minWidth: 82,
@@ -94,10 +94,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderRadius: 12,
     paddingHorizontal: 14,
-    backgroundColor: "#6366f1",
+    backgroundColor: "#D96F57",
   },
   buttonDisabled: {
-    backgroundColor: "#a5a6ed",
+    backgroundColor: "#E6A693",
   },
   buttonText: {
     color: "#fff",

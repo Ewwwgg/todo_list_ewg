@@ -9,7 +9,9 @@ export function Header({ totalCount, completedCount }: HeaderProps) {
   return (
     <View style={styles.container}>
       <View style={styles.titleRow}>
-        <Text style={styles.icon}>📝</Text>
+        <View style={styles.iconBadge}>
+          <Text style={styles.icon}>📝</Text>
+        </View>
         <Text style={styles.title}>Мій список завдань</Text>
       </View>
       <Text style={styles.subtitle}>
@@ -24,26 +26,34 @@ export function Header({ totalCount, completedCount }: HeaderProps) {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 22,
-    paddingTop: 26,
-    paddingBottom: 20,
+    paddingTop: 24,
+    paddingBottom: 18,
   },
   titleRow: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 10,
+    gap: 12,
+  },
+  iconBadge: {
+    width: 44,
+    height: 44,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 15,
+    backgroundColor: "#F9E5DA",
   },
   icon: {
-    fontSize: 27,
+    fontSize: 23,
   },
   title: {
-    color: "#20223a",
+    color: "#382E2A",
     fontSize: 23,
     fontWeight: "700",
     flexShrink: 1,
   },
   subtitle: {
-    color: "#77798c",
+    color: "#8A7770",
     fontSize: 14,
-    marginTop: 8,
+    marginTop: 9,
   },
 });

@@ -57,8 +57,8 @@ export function TodoList({
         <RefreshControl
           refreshing={refreshing}
           onRefresh={() => void onRefresh()}
-          tintColor="#6366f1"
-          colors={["#6366f1"]}
+          tintColor="#D96F57"
+          colors={["#D96F57"]}
         />
       }
     />
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     maxWidth: 270,
-    color: "#898b9c",
+    color: "#8A7770",
     fontSize: 15,
     lineHeight: 22,
     textAlign: "center",
