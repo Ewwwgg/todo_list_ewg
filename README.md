@@ -130,5 +130,10 @@ npm run typecheck
 
 ![Успішна Preview Android збірка в EAS](./screenshots/eas-build-list.png)
 
-Після встановлення Preview APK додай 1–2 скріншоти застосунку з фізичного
-пристрою або емулятора.
+Preview-застосунок, встановлений на Android:
+
+![Todo App Preview на Android](./screenshots/preview-app-android.png)
+
+Іконка Preview на головному екрані пристрою:
+
+![Іконка Todo App Preview на Android](./screenshots/preview-icon-android.png)
