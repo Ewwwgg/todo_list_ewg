@@ -80,9 +80,8 @@ Standalone Preview APK для внутрішнього тестування:
 npx eas-cli@latest build --platform android --profile preview
 ```
 
-Статус Preview build: [EAS Build 3244ed92](https://expo.dev/accounts/ewgen12/projects/rn-todo-list/builds/3244ed92-bb1a-46d4-97cd-9428d474e5d5).
-
-Сторінка Preview Build: [відкрити EAS Build](https://expo.dev/accounts/ewgen12/projects/rn-todo-list/builds/3244ed92-bb1a-46d4-97cd-9428d474e5d5).
+Preview build успішно зібраний: [EAS Build 3244ed92](https://expo.dev/accounts/ewgen12/projects/rn-todo-list/builds/3244ed92-bb1a-46d4-97cd-9428d474e5d5).
+Пряме посилання на APK: [Todo App Preview 4.0.0](https://expo.dev/artifacts/eas/I6mHcgByqmDZgg5bGHgaXLaE0iuPM6BcfRH0rTUn-qQ.apk).
 
 Production builds:
 
@@ -103,8 +102,6 @@ npx eas-cli@latest update --platform all --environment preview --channel preview
 ```
 
 Опубліковане OTA-оновлення Preview: [EAS Update group](https://expo.dev/accounts/ewgen12/projects/rn-todo-list/updates/a2bd302e-2795-4a11-9a82-58f790ef7f93).
-
-Опубліковане OTA-оновлення Preview: [відкрити update group](https://expo.dev/accounts/ewgen12/projects/rn-todo-list/updates/a2bd302e-2795-4a11-9a82-58f790ef7f93).
 
 Закрий Preview App повністю та відкрий повторно, щоб перевірити OTA-оновлення.
 Нативні зміни потребують нової збірки; JavaScript та assets можуть оновлюватися
@@ -129,5 +126,9 @@ npm run typecheck
 
 ![Налаштування у темній темі](./screenshots/settings-dark.png)
 
-Після встановлення Preview APK додай сюди 1–2 скріншоти застосунку з
+Список EAS Build у Expo Dashboard:
+
+![Успішна Preview Android збірка в EAS](./screenshots/eas-build-list.png)
+
+Після встановлення Preview APK додай 1–2 скріншоти застосунку з фізичного
 пристрою або емулятора.
