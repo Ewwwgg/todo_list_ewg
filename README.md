@@ -29,8 +29,10 @@ npx convex login
 npx convex dev --configure=new --dev-deployment=cloud
 ```
 
-Під час `project:init` прив'яжи проєкт до свого Expo-акаунта. Для Convex створи
-dev, preview і production deployments; у Expo/EAS створи середовища
+Під час `project:init` прив'яжи проєкт до свого Expo-акаунта. Команда
+`npx convex dev --configure=new --dev-deployment=cloud` створить хмарний dev
+deployment для проєкту `rn-todo-list`; окремо створи preview і production
+deployments. У Expo/EAS створи середовища
 `development`, `preview` та `production`. Для кожного середовища додай:
 
 | Змінна | Development | Preview | Production |
