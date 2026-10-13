@@ -234,7 +234,7 @@ export default function SettingsScreen() {
                 Синхронізація завдань у реальному часі
               </Text>
             </View>
-            <Text style={styles.version}>v3.0.0</Text>
+            <Text style={styles.version}>v4.0.0</Text>
           </View>
         </View>
       </ScrollView>
