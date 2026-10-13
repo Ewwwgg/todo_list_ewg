@@ -50,8 +50,9 @@ function ConvexSetupScreen() {
           Потрібно підключити Convex
         </Text>
         <Text style={[styles.setupText, { color: colors.textMuted }]}>
-          Запусти npx convex dev, створи dev deployment та перевір, що
-          EXPO_PUBLIC_CONVEX_URL записано у .env.local. Потім перезапусти Expo.
+          Запусти npx convex login, а потім npx convex dev
+          --configure=new --dev-deployment=cloud. CLI створить deployment і
+          запише EXPO_PUBLIC_CONVEX_URL у .env.local.
         </Text>
       </View>
     </>

@@ -13,17 +13,18 @@
 npm ci
 ```
 
-Авторизуй Convex CLI, а тоді створи dev deployment і згенеруй типи:
+Авторизуй Convex CLI та явно створи хмарний dev deployment:
 
 ```bash
 npx convex login
-npx convex dev
+npx convex dev --configure=new --dev-deployment=cloud
 ```
 
-Під час першого запуску створи проєкт `rn-todo-list`. CLI створить `.env.local`
-зі змінною `EXPO_PUBLIC_CONVEX_URL` та стежитиме за файлами в `convex/`.
-Локальний `.env.local` не додавай у Git. Файл `.env.example` показує потрібний
-формат змінної для ручного налаштування.
+Під час налаштування створи проєкт `rn-todo-list`. CLI згенерує типи та
+запише `.env.local` зі змінною `EXPO_PUBLIC_CONVEX_URL`. Після цього для
+розробки достатньо запускати `npx convex dev`. Локальний `.env.local` не
+додавай у Git. Файл `.env.example` показує потрібний формат змінної для
+ручного налаштування.
 
 ## Запуск
 
@@ -42,6 +43,8 @@ Expo Go. Якщо змінну Convex URL не налаштовано, заст�
 
 - Три вкладки: завдання, статистика та налаштування.
 - Convex schema з індексами `by_created_at` і `by_completion`.
+- `by_created_at` використано замість `by_creation_time`, оскільки Convex
+  резервує ім'я `by_creation_time`.
 - Реактивні запити `getTodos` та `getStats`.
 - Створення, редагування, перемикання статусу та видалення завдань через
   Convex mutations.
