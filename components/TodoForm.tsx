@@ -8,6 +8,8 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { useTheme } from "@/context/ThemeContext";
 
 interface TodoFormProps {
   onAdd: (text: string) => Promise<void>;
@@ -15,8 +17,10 @@ interface TodoFormProps {
 }
 
 export function TodoForm({ onAdd, loading }: TodoFormProps) {
+  const { colors } = useTheme();
   const [text, setText] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const styles = createStyles(colors);
 
   const handleSubmit = async () => {
     const trimmed = text.trim();
@@ -44,7 +48,8 @@ export function TodoForm({ onAdd, loading }: TodoFormProps) {
       <TextInput
         style={styles.input}
         placeholder="Що потрібно зробити?"
-        placeholderTextColor="#A88E80"
+        placeholderTextColor={colors.textMuted}
+        selectionColor={colors.primary}
         value={text}
         onChangeText={setText}
         onSubmitEditing={() => void handleSubmit()}
@@ -60,48 +65,52 @@ export function TodoForm({ onAdd, loading }: TodoFormProps) {
         accessibilityRole="button"
         accessibilityLabel="Додати завдання"
       >
+        <Ionicons name="add-outline" size={19} color={colors.surface} />
         <Text style={styles.buttonText}>
-          {isSubmitting ? "…" : "Додати"}
+          {isSubmitting ? "Додаємо..." : "Додати"}
         </Text>
       </TouchableOpacity>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: "row",
-    gap: 10,
-    paddingHorizontal: 22,
-    paddingBottom: 18,
-  },
-  input: {
-    flex: 1,
-    minWidth: 0,
-    height: 48,
-    borderWidth: 1,
-    borderColor: "#E9D8CA",
-    borderRadius: 12,
-    paddingHorizontal: 14,
-    color: "#43352E",
-    fontSize: 15,
-    backgroundColor: "#FFF9F2",
-  },
-  button: {
-    minWidth: 82,
-    height: 48,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 12,
-    paddingHorizontal: 14,
-    backgroundColor: "#D96F57",
-  },
-  buttonDisabled: {
-    backgroundColor: "#E6A693",
-  },
-  buttonText: {
-    color: "#fff",
-    fontSize: 14,
-    fontWeight: "700",
-  },
-});
+const createStyles = (colors: ReturnType<typeof useTheme>["colors"]) =>
+  StyleSheet.create({
+    container: {
+      flexDirection: "row",
+      gap: 10,
+      paddingHorizontal: 22,
+      paddingBottom: 18,
+    },
+    input: {
+      flex: 1,
+      minWidth: 0,
+      height: 48,
+      borderWidth: 1,
+      borderColor: colors.border,
+      borderRadius: 12,
+      paddingHorizontal: 14,
+      color: colors.text,
+      fontSize: 15,
+      backgroundColor: colors.surfaceAlt,
+    },
+    button: {
+      minWidth: 82,
+      height: 48,
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: 4,
+      borderRadius: 12,
+      paddingHorizontal: 14,
+      backgroundColor: colors.primary,
+    },
+    buttonDisabled: {
+      opacity: 0.55,
+    },
+    buttonText: {
+      color: colors.surface,
+      fontSize: 14,
+      fontWeight: "700",
+    },
+  });

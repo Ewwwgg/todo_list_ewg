@@ -1,4 +1,5 @@
-import { useState } from "react";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { useMemo, useState } from "react";
 import {
   Alert,
   StyleSheet,
@@ -7,6 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useTheme } from "@/context/ThemeContext";
 import type { Todo } from "@/types";
 
 interface TodoItemProps {
@@ -17,6 +19,8 @@ interface TodoItemProps {
 }
 
 export function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemProps) {
+  const { colors } = useTheme();
+  const styles = useMemo(() => createStyles(colors), [colors]);
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(todo.text);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -72,7 +76,7 @@ export function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemProps) {
   return (
     <View style={[styles.container, todo.completed && styles.completedContainer]}>
       <TouchableOpacity
-        style={[styles.checkbox, todo.completed && styles.checkboxChecked]}
+        style={styles.checkbox}
         onPress={() => void handleToggle()}
         disabled={isUpdating || isEditing}
         accessibilityRole="checkbox"
@@ -81,7 +85,11 @@ export function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemProps) {
           todo.completed ? "невиконане" : "виконане"
         }`}
       >
-        {todo.completed && <Text style={styles.checkmark}>✓</Text>}
+        <Ionicons
+          name={todo.completed ? "checkmark-circle" : "ellipse-outline"}
+          size={25}
+          color={todo.completed ? colors.success : colors.textMuted}
+        />
       </TouchableOpacity>
 
       {isEditing ? (
@@ -94,6 +102,7 @@ export function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemProps) {
           autoFocus
           maxLength={120}
           editable={!isUpdating}
+          selectionColor={colors.primary}
           accessibilityLabel="Редагувати завдання"
         />
       ) : (
@@ -107,119 +116,121 @@ export function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemProps) {
 
       <View style={styles.actions}>
         {isEditing ? (
-          <TouchableOpacity
-            style={styles.actionButton}
-            onPress={() => void handleSave()}
-            disabled={isUpdating}
-            accessibilityRole="button"
-            accessibilityLabel="Зберегти зміни"
-          >
-            <Text style={styles.saveAction}>✓</Text>
-          </TouchableOpacity>
+          <>
+            <TouchableOpacity
+              style={styles.actionButton}
+              onPress={() => void handleSave()}
+              disabled={isUpdating}
+              accessibilityRole="button"
+              accessibilityLabel="Зберегти зміни"
+            >
+              <Ionicons
+                name="checkmark-outline"
+                size={21}
+                color={colors.success}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.actionButton}
+              onPress={() => {
+                setEditText(todo.text);
+                setIsEditing(false);
+              }}
+              disabled={isUpdating}
+              accessibilityRole="button"
+              accessibilityLabel="Скасувати редагування"
+            >
+              <Ionicons name="close-outline" size={21} color={colors.textMuted} />
+            </TouchableOpacity>
+          </>
         ) : (
-          <TouchableOpacity
-            style={styles.actionButton}
-            onPress={() => {
-              setEditText(todo.text);
-              setIsEditing(true);
-            }}
-            disabled={isUpdating}
-            accessibilityRole="button"
-            accessibilityLabel="Редагувати завдання"
-          >
-            <Text style={styles.editAction}>✎</Text>
-          </TouchableOpacity>
+          <>
+            <TouchableOpacity
+              style={styles.actionButton}
+              onPress={() => {
+                setEditText(todo.text);
+                setIsEditing(true);
+              }}
+              disabled={isUpdating}
+              accessibilityRole="button"
+              accessibilityLabel={`Редагувати: ${todo.text}`}
+            >
+              <Ionicons
+                name="create-outline"
+                size={20}
+                color={colors.textMuted}
+              />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.actionButton}
+              onPress={() => void handleDelete()}
+              disabled={isUpdating}
+              accessibilityRole="button"
+              accessibilityLabel={`Видалити: ${todo.text}`}
+            >
+              <Ionicons
+                name="trash-outline"
+                size={20}
+                color={colors.danger}
+              />
+            </TouchableOpacity>
+          </>
         )}
-        <TouchableOpacity
-          style={styles.actionButton}
-          onPress={() => void handleDelete()}
-          disabled={isUpdating}
-          accessibilityRole="button"
-          accessibilityLabel="Видалити завдання"
-        >
-          <Text style={styles.deleteAction}>×</Text>
-        </TouchableOpacity>
       </View>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    minHeight: 66,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 12,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: "#EADBD0",
-    paddingHorizontal: 13,
-    paddingVertical: 10,
-    backgroundColor: "#FFFEFA",
-  },
-  completedContainer: {
-    backgroundColor: "#F8EEE4",
-  },
-  checkbox: {
-    width: 23,
-    height: 23,
-    borderWidth: 2,
-    borderColor: "#CDAE9B",
-    borderRadius: 7,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  checkboxChecked: {
-    borderColor: "#D96F57",
-    backgroundColor: "#D96F57",
-  },
-  checkmark: {
-    color: "#FFFCF7",
-    fontSize: 15,
-    lineHeight: 18,
-    fontWeight: "700",
-  },
-  todoText: {
-    flex: 1,
-    color: "#43352E",
-    fontSize: 15,
-    lineHeight: 21,
-  },
-  todoTextCompleted: {
-    color: "#A89182",
-    textDecorationLine: "line-through",
-  },
-  editInput: {
-    flex: 1,
-    minWidth: 0,
-    minHeight: 40,
-    borderBottomWidth: 1,
-    borderBottomColor: "#D96F57",
-    color: "#43352E",
-    fontSize: 15,
-  },
-  actions: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  actionButton: {
-    width: 34,
-    height: 38,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  editAction: {
-    color: "#8C6B5B",
-    fontSize: 23,
-  },
-  saveAction: {
-    color: "#D96F57",
-    fontSize: 21,
-    fontWeight: "700",
-  },
-  deleteAction: {
-    color: "#C36D5C",
-    fontSize: 27,
-    lineHeight: 30,
-  },
-});
+const createStyles = (colors: ReturnType<typeof useTheme>["colors"]) =>
+  StyleSheet.create({
+    container: {
+      minHeight: 66,
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 10,
+      borderRadius: 14,
+      borderWidth: 1,
+      borderColor: colors.border,
+      paddingHorizontal: 12,
+      paddingVertical: 10,
+      backgroundColor: colors.surface,
+    },
+    completedContainer: {
+      backgroundColor: colors.surfaceAlt,
+    },
+    checkbox: {
+      width: 30,
+      height: 36,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    todoText: {
+      flex: 1,
+      color: colors.text,
+      fontSize: 15,
+      lineHeight: 21,
+    },
+    todoTextCompleted: {
+      color: colors.textMuted,
+      textDecorationLine: "line-through",
+    },
+    editInput: {
+      flex: 1,
+      minWidth: 0,
+      minHeight: 40,
+      borderBottomWidth: 1,
+      borderBottomColor: colors.primary,
+      color: colors.text,
+      fontSize: 15,
+    },
+    actions: {
+      flexDirection: "row",
+      alignItems: "center",
+    },
+    actionButton: {
+      width: 32,
+      height: 38,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+  });

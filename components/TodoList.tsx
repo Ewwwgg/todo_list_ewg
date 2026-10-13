@@ -1,3 +1,4 @@
+import Ionicons from "@expo/vector-icons/Ionicons";
 import {
   FlatList,
   RefreshControl,
@@ -5,6 +6,7 @@ import {
   Text,
   View,
 } from "react-native";
+import { useTheme } from "@/context/ThemeContext";
 import type { Todo } from "@/types";
 import { TodoItem } from "./TodoItem";
 
@@ -25,6 +27,9 @@ export function TodoList({
   onDelete,
   onEdit,
 }: TodoListProps) {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
+
   return (
     <FlatList
       style={styles.list}
@@ -41,7 +46,9 @@ export function TodoList({
       ItemSeparatorComponent={() => <View style={styles.separator} />}
       ListEmptyComponent={
         <View style={styles.emptyContainer}>
-          <Text style={styles.emptyIcon}>☀️</Text>
+          <View style={styles.emptyBadge}>
+            <Ionicons name="list-outline" size={27} color={colors.primary} />
+          </View>
           <Text style={styles.emptyText}>
             Список завдань порожній. Додайте нове завдання!
           </Text>
@@ -57,44 +64,51 @@ export function TodoList({
         <RefreshControl
           refreshing={refreshing}
           onRefresh={() => void onRefresh()}
-          tintColor="#D96F57"
-          colors={["#D96F57"]}
+          tintColor={colors.primary}
+          colors={[colors.primary]}
+          progressBackgroundColor={colors.surface}
         />
       }
     />
   );
 }
 
-const styles = StyleSheet.create({
-  list: {
-    flex: 1,
-  },
-  listContent: {
-    paddingHorizontal: 22,
-    paddingBottom: 24,
-  },
-  emptyListContent: {
-    flexGrow: 1,
-  },
-  separator: {
-    height: 10,
-  },
-  emptyContainer: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 20,
-    paddingVertical: 32,
-  },
-  emptyIcon: {
-    fontSize: 34,
-    marginBottom: 12,
-  },
-  emptyText: {
-    maxWidth: 270,
-    color: "#8A7770",
-    fontSize: 15,
-    lineHeight: 22,
-    textAlign: "center",
-  },
-});
+const createStyles = (colors: ReturnType<typeof useTheme>["colors"]) =>
+  StyleSheet.create({
+    list: {
+      flex: 1,
+    },
+    listContent: {
+      paddingHorizontal: 22,
+      paddingBottom: 24,
+    },
+    emptyListContent: {
+      flexGrow: 1,
+    },
+    separator: {
+      height: 10,
+    },
+    emptyContainer: {
+      flex: 1,
+      alignItems: "center",
+      justifyContent: "center",
+      paddingHorizontal: 20,
+      paddingVertical: 32,
+    },
+    emptyBadge: {
+      width: 58,
+      height: 58,
+      alignItems: "center",
+      justifyContent: "center",
+      borderRadius: 20,
+      backgroundColor: colors.primaryLight,
+      marginBottom: 14,
+    },
+    emptyText: {
+      maxWidth: 270,
+      color: colors.textMuted,
+      fontSize: 15,
+      lineHeight: 22,
+      textAlign: "center",
+    },
+  });
