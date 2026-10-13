@@ -132,8 +132,13 @@ npm run typecheck
 
 Preview-застосунок, встановлений на Android:
 
-![Todo App Preview на Android](./screenshots/preview-app-android.png)
-
-Іконка Preview на головному екрані пристрою:
-
-![Іконка Todo App Preview на Android](./screenshots/preview-icon-android.png)
+<table>
+  <tr>
+    <th>Todo App Preview на Android</th>
+    <th>Іконка Preview на головному екрані</th>
+  </tr>
+  <tr>
+    <td><img src="./screenshots/preview-app-android.png" alt="Todo App Preview на Android" width="300"></td>
+    <td><img src="./screenshots/preview-icon-android.png" alt="Іконка Todo App Preview на Android" width="300"></td>
+  </tr>
+</table>
