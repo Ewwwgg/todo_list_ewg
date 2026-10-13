@@ -4,6 +4,7 @@ React Native / Expo Todo App з Convex real-time backend, трьома EAS-се�
 окремими application ID, EAS Build профілями та EAS Update каналами.
 
 EAS Build та EAS Update потребують Expo-акаунта і зв'язку проєкту з EAS.
+Expo Dashboard: [@ewgen12/rn-todo-list](https://expo.dev/accounts/ewgen12/projects/rn-todo-list).
 
 ## Середовища
 
@@ -41,9 +42,11 @@ deployments. У Expo/EAS створи середовища
 | `EXPO_PUBLIC_CONVEX_URL` | Convex dev URL | Convex preview URL | Convex production URL |
 | `CONVEX_DEPLOYMENT` | dev deployment | preview deployment | production deployment |
 
-Також налаштуй `EXPO_OWNER` та `EAS_PROJECT_ID` для dynamic app config. Не
-коміть `.env.local`: файл `.env.example` містить лише шаблон. Після входу та
-налаштування змінних запусти `npx convex dev`; він генерує типи та
+`APP_ENV` уже налаштований для кожного EAS environment. Додай Convex URL та
+deployment ID після створення хмарних Convex deployments. `project:init`
+записав Expo owner і EAS project ID у конфігурацію. Не коміть `.env.local`:
+файл `.env.example` містить лише шаблон. Після налаштування змінних запускай
+`npx convex dev`; він генерує типи та
 синхронізує backend. Для локальної розробки стягни EAS-змінні командою
 `npx eas-cli@latest env:pull --environment development`. Перед store build
 задеплой production Convex:

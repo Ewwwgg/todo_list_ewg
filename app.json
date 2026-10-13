@@ -37,6 +37,13 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "70671865-1a1a-4ee8-adca-d603c8c930ce"
+      }
+    },
+    "owner": "ewgen12"
   }
 }
