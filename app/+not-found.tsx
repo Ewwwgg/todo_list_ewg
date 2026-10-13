@@ -14,7 +14,7 @@ export default function NotFoundScreen() {
         </Text>
 
         <Link
-          href="/(tabs)/index"
+          href="/"
           style={[styles.link, { color: colors.primary }]}
         >
           <Text style={[styles.linkText, { color: colors.primary }]}>

@@ -1,27 +1,39 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useQuery } from "convex/react";
 import { useMemo, type ComponentProps } from "react";
 import {
+  ActivityIndicator,
   ScrollView,
   StyleSheet,
   Text,
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { api } from "@/convex/_generated/api";
 import { useTheme } from "@/context/ThemeContext";
-import { useTodos } from "@/context/TodoContext";
 
 type IconName = ComponentProps<typeof Ionicons>["name"];
 
 export default function StatsScreen() {
   const { colors } = useTheme();
-  const { todos } = useTodos();
+  const stats = useQuery(api.todos.getStats);
   const styles = useMemo(() => createStyles(colors), [colors]);
-  const completedCount = todos.filter((todo) => todo.completed).length;
-  const activeCount = todos.length - completedCount;
-  const progress =
-    todos.length === 0 ? 0 : Math.round((completedCount / todos.length) * 100);
 
-  const stats: {
+  if (stats === undefined) {
+    return (
+      <SafeAreaView
+        style={styles.safeArea}
+        edges={["top", "left", "right"]}
+      >
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color={colors.primary} />
+          <Text style={styles.subtitle}>Завантаження статистики...</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
+
+  const cards: {
     label: string;
     value: number | string;
     icon: IconName;
@@ -30,28 +42,28 @@ export default function StatsScreen() {
   }[] = [
     {
       label: "Всього завдань",
-      value: todos.length,
+      value: stats.total,
       icon: "list-outline",
       tint: colors.primaryLight,
       color: colors.primary,
     },
     {
       label: "Активні",
-      value: activeCount,
+      value: stats.active,
       icon: "time-outline",
       tint: colors.surfaceAlt,
       color: colors.warning,
     },
     {
       label: "Виконані",
-      value: completedCount,
+      value: stats.completed,
       icon: "checkmark-done-outline",
       tint: colors.surfaceAlt,
       color: colors.success,
     },
     {
       label: "Прогрес",
-      value: `${progress}%`,
+      value: `${stats.percentage}%`,
       icon: "trending-up-outline",
       tint: colors.primaryLight,
       color: colors.primary,
@@ -64,18 +76,18 @@ export default function StatsScreen() {
         <View style={styles.heading}>
           <Text style={styles.title}>Статистика</Text>
           <Text style={styles.subtitle}>
-            Твій прогрес у виконанні завдань
+            Аналітика завдань у реальному часі
           </Text>
         </View>
 
         <View style={styles.grid}>
-          {stats.map((stat) => (
-            <View key={stat.label} style={styles.statCard}>
-              <View style={[styles.iconBadge, { backgroundColor: stat.tint }]}>
-                <Ionicons name={stat.icon} size={21} color={stat.color} />
+          {cards.map((card) => (
+            <View key={card.label} style={styles.statCard}>
+              <View style={[styles.iconBadge, { backgroundColor: card.tint }]}>
+                <Ionicons name={card.icon} size={21} color={card.color} />
               </View>
-              <Text style={styles.statValue}>{stat.value}</Text>
-              <Text style={styles.statLabel}>{stat.label}</Text>
+              <Text style={styles.statValue}>{card.value}</Text>
+              <Text style={styles.statLabel}>{card.label}</Text>
             </View>
           ))}
         </View>
@@ -85,18 +97,21 @@ export default function StatsScreen() {
             <View>
               <Text style={styles.progressTitle}>Загальний прогрес</Text>
               <Text style={styles.progressSubtitle}>
-                {completedCount} із {todos.length} завдань виконано
+                {stats.completed} із {stats.total} завдань виконано
               </Text>
             </View>
-            <Text style={styles.progressPercent}>{progress}%</Text>
+            <Text style={styles.progressPercent}>{stats.percentage}%</Text>
           </View>
           <View
             style={styles.progressTrack}
             accessibilityRole="progressbar"
-            accessibilityValue={{ min: 0, max: 100, now: progress }}
+            accessibilityValue={{ min: 0, max: 100, now: stats.percentage }}
           >
             <View
-              style={[styles.progressFill, { width: `${progress}%` }]}
+              style={[
+                styles.progressFill,
+                { width: `${stats.percentage}%` },
+              ]}
             />
           </View>
         </View>
@@ -204,5 +219,11 @@ const createStyles = (colors: ReturnType<typeof useTheme>["colors"]) =>
       height: "100%",
       borderRadius: 5,
       backgroundColor: colors.primary,
+    },
+    loadingContainer: {
+      flex: 1,
+      alignItems: "center",
+      justifyContent: "center",
+      gap: 12,
     },
   });

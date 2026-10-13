@@ -13,9 +13,9 @@ import type { Todo } from "@/types";
 
 interface TodoItemProps {
   todo: Todo;
-  onToggle: (id: string, completed: boolean) => Promise<void>;
-  onDelete: (id: string) => Promise<void>;
-  onEdit: (id: string, text: string) => Promise<void>;
+  onToggle: (id: Todo["_id"]) => Promise<void>;
+  onDelete: (id: Todo["_id"]) => Promise<void>;
+  onEdit: (id: Todo["_id"], text: string) => Promise<void>;
 }
 
 export function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemProps) {
@@ -39,7 +39,7 @@ export function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemProps) {
 
     setIsUpdating(true);
     try {
-      await onEdit(todo.id, trimmed);
+      await onEdit(todo._id, trimmed);
       setIsEditing(false);
     } catch (error) {
       console.error(error);
@@ -52,7 +52,7 @@ export function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemProps) {
   const handleToggle = async () => {
     setIsUpdating(true);
     try {
-      await onToggle(todo.id, !todo.completed);
+      await onToggle(todo._id);
     } catch (error) {
       console.error(error);
       Alert.alert("Помилка", "Не вдалося оновити статус завдання.");
@@ -64,7 +64,7 @@ export function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemProps) {
   const handleDelete = async () => {
     setIsUpdating(true);
     try {
-      await onDelete(todo.id);
+      await onDelete(todo._id);
     } catch (error) {
       console.error(error);
       Alert.alert("Помилка", "Не вдалося видалити завдання.");
@@ -74,21 +74,26 @@ export function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemProps) {
   };
 
   return (
-    <View style={[styles.container, todo.completed && styles.completedContainer]}>
+    <View
+      style={[styles.container, todo.isCompleted && styles.completedContainer]}
+    >
       <TouchableOpacity
         style={styles.checkbox}
         onPress={() => void handleToggle()}
         disabled={isUpdating || isEditing}
         accessibilityRole="checkbox"
-        accessibilityState={{ checked: todo.completed, disabled: isUpdating }}
+        accessibilityState={{
+          checked: todo.isCompleted,
+          disabled: isUpdating,
+        }}
         accessibilityLabel={`Позначити завдання «${todo.text}» як ${
-          todo.completed ? "невиконане" : "виконане"
+          todo.isCompleted ? "невиконане" : "виконане"
         }`}
       >
         <Ionicons
-          name={todo.completed ? "checkmark-circle" : "ellipse-outline"}
+          name={todo.isCompleted ? "checkmark-circle" : "ellipse-outline"}
           size={25}
-          color={todo.completed ? colors.success : colors.textMuted}
+          color={todo.isCompleted ? colors.success : colors.textMuted}
         />
       </TouchableOpacity>
 
@@ -107,7 +112,10 @@ export function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemProps) {
         />
       ) : (
         <Text
-          style={[styles.todoText, todo.completed && styles.todoTextCompleted]}
+          style={[
+            styles.todoText,
+            todo.isCompleted && styles.todoTextCompleted,
+          ]}
           numberOfLines={3}
         >
           {todo.text}

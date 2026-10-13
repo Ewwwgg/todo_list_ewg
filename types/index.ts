@@ -1,9 +1,6 @@
-export interface Todo {
-  id: string;
-  text: string;
-  completed: boolean;
-  createdAt?: number;
-}
+import type { Doc } from "@/convex/_generated/dataModel";
+
+export type Todo = Doc<"todos">;
 
 export interface ThemeColors {
   bg: string;

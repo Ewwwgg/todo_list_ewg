@@ -1,7 +1,6 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import {
   FlatList,
-  RefreshControl,
   StyleSheet,
   Text,
   View,
@@ -12,17 +11,13 @@ import { TodoItem } from "./TodoItem";
 
 interface TodoListProps {
   todos: Todo[];
-  refreshing: boolean;
-  onRefresh: () => Promise<void>;
-  onToggle: (id: string, completed: boolean) => Promise<void>;
-  onDelete: (id: string) => Promise<void>;
-  onEdit: (id: string, text: string) => Promise<void>;
+  onToggle: (id: Todo["_id"]) => Promise<void>;
+  onDelete: (id: Todo["_id"]) => Promise<void>;
+  onEdit: (id: Todo["_id"], text: string) => Promise<void>;
 }
 
 export function TodoList({
   todos,
-  refreshing,
-  onRefresh,
   onToggle,
   onDelete,
   onEdit,
@@ -34,7 +29,7 @@ export function TodoList({
     <FlatList
       style={styles.list}
       data={todos}
-      keyExtractor={(item) => item.id}
+      keyExtractor={(item) => item._id}
       renderItem={({ item }) => (
         <TodoItem
           todo={item}
@@ -60,15 +55,6 @@ export function TodoList({
       ]}
       showsVerticalScrollIndicator={false}
       keyboardShouldPersistTaps="handled"
-      refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={() => void onRefresh()}
-          tintColor={colors.primary}
-          colors={[colors.primary]}
-          progressBackgroundColor={colors.surface}
-        />
-      }
     />
   );
 }

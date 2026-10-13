@@ -1,4 +1,5 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useMutation, useQuery } from "convex/react";
 import { useMemo } from "react";
 import {
   Alert,
@@ -11,24 +12,27 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { api } from "@/convex/_generated/api";
 import { useTheme } from "@/context/ThemeContext";
-import { useTodos } from "@/context/TodoContext";
 
 export default function SettingsScreen() {
   const { colors, isDarkMode, toggleTheme } = useTheme();
-  const { todos, clearCompleted, clearAll } = useTodos();
+  const stats = useQuery(api.todos.getStats);
+  const clearCompletedMutation = useMutation(api.todos.clearCompleted);
+  const clearAllMutation = useMutation(api.todos.clearAll);
   const styles = useMemo(() => createStyles(colors), [colors]);
-  const completedCount = todos.filter((todo) => todo.completed).length;
+  const completedCount = stats?.completed ?? 0;
+  const totalCount = stats?.total ?? 0;
 
   const performAction = async (
-    action: () => Promise<void>,
-    successMessage: string,
+    action: () => Promise<{ deletedCount: number }>,
+    successMessage: (deletedCount: number) => string,
   ) => {
     try {
-      await action();
-      Alert.alert("Готово", successMessage);
+      const result = await action();
+      Alert.alert("Готово", successMessage(result.deletedCount));
     } catch (error) {
-      console.error("Не вдалося виконати дію зі списком:", error);
+      console.error("Не вдалося очистити завдання в Convex:", error);
       Alert.alert("Помилка", "Не вдалося оновити список завдань.");
     }
   };
@@ -36,8 +40,8 @@ export default function SettingsScreen() {
   const confirmAction = (
     title: string,
     message: string,
-    action: () => Promise<void>,
-    successMessage: string,
+    action: () => Promise<{ deletedCount: number }>,
+    successMessage: (deletedCount: number) => string,
   ) => {
     const onConfirm = () => {
       void performAction(action, successMessage);
@@ -106,7 +110,7 @@ export default function SettingsScreen() {
           </View>
         </View>
 
-        <Text style={styles.sectionTitle}>Керування завданнями</Text>
+        <Text style={styles.sectionTitle}>Керування хмарними даними</Text>
         <View style={styles.card}>
           <TouchableOpacity
             style={styles.actionRow}
@@ -114,13 +118,15 @@ export default function SettingsScreen() {
               confirmAction(
                 "Очистити виконані завдання?",
                 `Буде видалено ${completedCount} завершених завдань.`,
-                clearCompleted,
-                "Виконані завдання видалено.",
+                () => clearCompletedMutation({}),
+                (count) => `Видалено ${count} виконаних завдань.`,
               )
             }
-            disabled={completedCount === 0}
+            disabled={stats === undefined || completedCount === 0}
             accessibilityRole="button"
-            accessibilityState={{ disabled: completedCount === 0 }}
+            accessibilityState={{
+              disabled: stats === undefined || completedCount === 0,
+            }}
           >
             <View
               style={[
@@ -138,13 +144,16 @@ export default function SettingsScreen() {
               <Text
                 style={[
                   styles.settingTitle,
-                  completedCount === 0 && styles.disabledText,
+                  (stats === undefined || completedCount === 0) &&
+                    styles.disabledText,
                 ]}
               >
                 Очистити виконані
               </Text>
               <Text style={styles.settingDescription}>
-                Завершено: {completedCount}
+                {stats === undefined
+                  ? "Завантаження..."
+                  : `Завершено: ${completedCount}`}
               </Text>
             </View>
             <Ionicons
@@ -161,14 +170,16 @@ export default function SettingsScreen() {
             onPress={() =>
               confirmAction(
                 "Видалити всі завдання?",
-                `Буде видалено всі ${todos.length} завдань. Цю дію не можна скасувати.`,
-                clearAll,
-                "Усі завдання видалено.",
+                `Буде видалено всі ${totalCount} завдань. Цю дію не можна скасувати.`,
+                () => clearAllMutation({}),
+                (count) => `Видалено ${count} завдань.`,
               )
             }
-            disabled={todos.length === 0}
+            disabled={stats === undefined || totalCount === 0}
             accessibilityRole="button"
-            accessibilityState={{ disabled: todos.length === 0 }}
+            accessibilityState={{
+              disabled: stats === undefined || totalCount === 0,
+            }}
           >
             <View style={[styles.iconBadge, styles.dangerBadge]}>
               <Ionicons
@@ -182,13 +193,16 @@ export default function SettingsScreen() {
                 style={[
                   styles.settingTitle,
                   { color: colors.danger },
-                  todos.length === 0 && styles.disabledText,
+                  (stats === undefined || totalCount === 0) &&
+                    styles.disabledText,
                 ]}
               >
                 Видалити всі завдання
               </Text>
               <Text style={styles.settingDescription}>
-                Буде видалено: {todos.length}
+                {stats === undefined
+                  ? "Завантаження..."
+                  : `Буде видалено: ${totalCount}`}
               </Text>
             </View>
             <Ionicons
@@ -209,7 +223,7 @@ export default function SettingsScreen() {
               ]}
             >
               <Ionicons
-                name="information-circle-outline"
+                name="cloud-outline"
                 size={22}
                 color={colors.textMuted}
               />
@@ -217,10 +231,10 @@ export default function SettingsScreen() {
             <View style={styles.settingCopy}>
               <Text style={styles.settingTitle}>Todo App</Text>
               <Text style={styles.settingDescription}>
-                Список справ із турботою про деталі
+                Синхронізація завдань у реальному часі
               </Text>
             </View>
-            <Text style={styles.version}>v2.0.0</Text>
+            <Text style={styles.version}>v3.0.0</Text>
           </View>
         </View>
       </ScrollView>
