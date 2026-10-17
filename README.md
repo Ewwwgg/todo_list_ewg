@@ -135,6 +135,21 @@ npm run typecheck
 
 ![Налаштування у темній темі](./screenshots/settings-dark.png)
 
+Екрани автентифікації та профіль у Preview-застосунку (Android):
+
+<table>
+  <tr>
+    <th>Вхід</th>
+    <th>Реєстрація</th>
+    <th>Профіль і Sign Out</th>
+  </tr>
+  <tr>
+    <td><img src="./screenshots/sign-in-android.png" alt="Екран входу" width="240"></td>
+    <td><img src="./screenshots/sign-up-android.png" alt="Екран реєстрації" width="240"></td>
+    <td><img src="./screenshots/settings-profile-android.png" alt="Налаштування з профілем користувача" width="240"></td>
+  </tr>
+</table>
+
 Список EAS Build у Expo Dashboard:
 
 ![Успішна Preview Android збірка в EAS](./screenshots/eas-build-list.png)
