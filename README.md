@@ -142,11 +142,13 @@ npm run typecheck
     <th>Вхід</th>
     <th>Реєстрація</th>
     <th>Профіль і Sign Out</th>
+    <th>Персональні завдання</th>
   </tr>
   <tr>
     <td><img src="./screenshots/sign-in-android.png" alt="Екран входу" width="240"></td>
     <td><img src="./screenshots/sign-up-android.png" alt="Екран реєстрації" width="240"></td>
     <td><img src="./screenshots/settings-profile-android.png" alt="Налаштування з профілем користувача" width="240"></td>
+    <td><img src="./screenshots/tasks-android.png" alt="Список завдань користувача" width="240"></td>
   </tr>
 </table>
 
