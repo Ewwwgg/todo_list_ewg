@@ -1,3 +1,4 @@
+import { useAuthActions } from "@convex-dev/auth/react";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useMutation, useQuery } from "convex/react";
 import { useMemo } from "react";
@@ -17,6 +18,8 @@ import { useTheme } from "@/context/ThemeContext";
 
 export default function SettingsScreen() {
   const { colors, isDarkMode, toggleTheme } = useTheme();
+  const { signOut } = useAuthActions();
+  const user = useQuery(api.users.currentUser);
   const stats = useQuery(api.todos.getStats);
   const clearCompletedMutation = useMutation(api.todos.clearCompleted);
   const clearAllMutation = useMutation(api.todos.clearAll);
@@ -60,6 +63,26 @@ export default function SettingsScreen() {
     ]);
   };
 
+  const handleSignOut = () => {
+    const onConfirm = () => {
+      void signOut().catch(() => {
+        Alert.alert("Помилка", "Не вдалося вийти з акаунта.");
+      });
+    };
+
+    if (Platform.OS === "web") {
+      if (globalThis.confirm("Ви впевнені, що хочете вийти з додатку?")) {
+        onConfirm();
+      }
+      return;
+    }
+
+    Alert.alert("Вихід з акаунта", "Ви впевнені, що хочете вийти з додатку?", [
+      { text: "Скасувати", style: "cancel" },
+      { text: "Вийти", style: "destructive", onPress: onConfirm },
+    ]);
+  };
+
   const handleThemeToggle = () => {
     void toggleTheme().catch(() => {
       Alert.alert("Помилка", "Не вдалося зберегти вибір теми.");
@@ -72,6 +95,24 @@ export default function SettingsScreen() {
         <View style={styles.heading}>
           <Text style={styles.title}>Налаштування</Text>
           <Text style={styles.subtitle}>Персоналізуй свій простір</Text>
+        </View>
+
+        <View style={styles.userCard}>
+          <View style={styles.userAvatar}>
+            <Ionicons name="person" size={26} color="#FFFFFF" />
+          </View>
+          <View style={styles.userInfo}>
+            <Text style={styles.userName}>{user?.name ?? "Користувач"}</Text>
+            <Text style={styles.userEmail}>{user?.email ?? ""}</Text>
+          </View>
+          <TouchableOpacity
+            style={styles.signOutBtn}
+            onPress={handleSignOut}
+            accessibilityLabel="Вийти з акаунта"
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          >
+            <Ionicons name="log-out-outline" size={24} color={colors.danger} />
+          </TouchableOpacity>
         </View>
 
         <Text style={styles.sectionTitle}>Зовнішній вигляд</Text>
@@ -258,6 +299,41 @@ const createStyles = (colors: ReturnType<typeof useTheme>["colors"]) =>
     },
     heading: {
       marginBottom: 24,
+    },
+    userCard: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 12,
+      padding: 14,
+      marginBottom: 6,
+      borderWidth: 1,
+      borderColor: colors.border,
+      borderRadius: 18,
+      backgroundColor: colors.surface,
+    },
+    userAvatar: {
+      width: 48,
+      height: 48,
+      borderRadius: 24,
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: colors.primary,
+    },
+    userInfo: {
+      flex: 1,
+    },
+    userName: {
+      color: colors.text,
+      fontSize: 16,
+      fontWeight: "700",
+    },
+    userEmail: {
+      color: colors.textMuted,
+      fontSize: 13,
+      marginTop: 2,
+    },
+    signOutBtn: {
+      padding: 6,
     },
     title: {
       color: colors.text,

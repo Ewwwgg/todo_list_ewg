@@ -1,12 +1,17 @@
+import { ConvexAuthProvider } from "@convex-dev/auth/react";
 import {
-  ConvexProvider,
+  Authenticated,
+  AuthLoading,
   ConvexReactClient,
+  Unauthenticated,
 } from "convex/react";
+import * as SecureStore from "expo-secure-store";
 import { ThemeProvider, useTheme } from "@/context/ThemeContext";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import {
   ActivityIndicator,
+  Platform,
   StyleSheet,
   Text,
   View,
@@ -19,24 +24,55 @@ const convexClient = convexUrl
   ? new ConvexReactClient(convexUrl, { unsavedChangesWarning: false })
   : null;
 
+const secureStorage = {
+  getItem: SecureStore.getItemAsync,
+  setItem: SecureStore.setItemAsync,
+  removeItem: SecureStore.deleteItemAsync,
+};
+
+function Splash() {
+  const { colors } = useTheme();
+
+  return (
+    <View style={[styles.loading, { backgroundColor: colors.bg }]}>
+      <ActivityIndicator size="large" color={colors.primary} />
+    </View>
+  );
+}
+
 function RootNavigator() {
   const { colors, isDarkMode, isReady } = useTheme();
+
+  if (!isReady) {
+    return <Splash />;
+  }
+
+  const screenOptions = {
+    headerShown: false,
+    contentStyle: { backgroundColor: colors.bg },
+  };
 
   return (
     <>
       <StatusBar style={isDarkMode ? "light" : "dark"} />
-      {isReady ? (
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <AuthLoading>
+        <Splash />
+      </AuthLoading>
+      <Unauthenticated>
+        <Stack screenOptions={screenOptions}>
+          <Stack.Screen name="sign-in" />
+          <Stack.Screen name="sign-up" />
         </Stack>
-      ) : (
-        <View style={[styles.loading, { backgroundColor: colors.bg }]}>
-          <ActivityIndicator size="large" color={colors.primary} />
-        </View>
-      )}
+      </Unauthenticated>
+      <Authenticated>
+        <Stack screenOptions={screenOptions}>
+          <Stack.Screen name="(tabs)" />
+        </Stack>
+      </Authenticated>
     </>
   );
 }
+
 
 function ConvexSetupScreen() {
   const { colors, isDarkMode } = useTheme();
@@ -64,9 +100,12 @@ export default function RootLayout() {
     <SafeAreaProvider>
       <ThemeProvider>
         {convexClient ? (
-          <ConvexProvider client={convexClient}>
+          <ConvexAuthProvider
+            client={convexClient}
+            storage={Platform.OS === "web" ? undefined : secureStorage}
+          >
             <RootNavigator />
-          </ConvexProvider>
+          </ConvexAuthProvider>
         ) : (
           <ConvexSetupScreen />
         )}
