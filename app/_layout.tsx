@@ -1,9 +1,7 @@
 import { ConvexAuthProvider } from "@convex-dev/auth/react";
 import {
-  Authenticated,
-  AuthLoading,
   ConvexReactClient,
-  Unauthenticated,
+  useConvexAuth,
 } from "convex/react";
 import * as SecureStore from "expo-secure-store";
 import { ThemeProvider, useTheme } from "@/context/ThemeContext";
@@ -42,33 +40,29 @@ function Splash() {
 
 function RootNavigator() {
   const { colors, isDarkMode, isReady } = useTheme();
+  const { isLoading, isAuthenticated } = useConvexAuth();
 
-  if (!isReady) {
+  if (!isReady || isLoading) {
     return <Splash />;
   }
-
-  const screenOptions = {
-    headerShown: false,
-    contentStyle: { backgroundColor: colors.bg },
-  };
 
   return (
     <>
       <StatusBar style={isDarkMode ? "light" : "dark"} />
-      <AuthLoading>
-        <Splash />
-      </AuthLoading>
-      <Unauthenticated>
-        <Stack screenOptions={screenOptions}>
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          contentStyle: { backgroundColor: colors.bg },
+        }}
+      >
+        <Stack.Protected guard={!isAuthenticated}>
           <Stack.Screen name="sign-in" />
           <Stack.Screen name="sign-up" />
-        </Stack>
-      </Unauthenticated>
-      <Authenticated>
-        <Stack screenOptions={screenOptions}>
+        </Stack.Protected>
+        <Stack.Protected guard={isAuthenticated}>
           <Stack.Screen name="(tabs)" />
-        </Stack>
-      </Authenticated>
+        </Stack.Protected>
+      </Stack>
     </>
   );
 }
