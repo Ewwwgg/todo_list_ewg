@@ -6,6 +6,15 @@ React Native / Expo Todo App з Convex real-time backend, трьома EAS-се�
 EAS Build та EAS Update потребують Expo-акаунта і зв'язку проєкту з EAS.
 Expo Dashboard: [@ewgen12/rn-todo-list](https://expo.dev/accounts/ewgen12/projects/rn-todo-list).
 
+## Автентифікація (Convex Auth)
+
+Email + пароль через `@convex-dev/auth`, токени зберігаються в `expo-secure-store`.
+Кожен користувач бачить лише власні завдання (перевірка `getAuthUserId` у
+`convex/todos.ts`). Для кожного Convex deployment задай змінні `JWT_PRIVATE_KEY`,
+`JWKS` та `SITE_URL` (`npx convex env set ...`). Маршрути захищені в
+`app/_layout.tsx`; екрани `app/sign-in.tsx` і `app/sign-up.tsx`, вихід — у вкладці
+«Налаштування».
+
 ## Середовища
 
 | APP_ENV | Назва | Android/iOS ID | Канал |
@@ -80,8 +89,8 @@ Standalone Preview APK для внутрішнього тестування:
 npx eas-cli@latest build --platform android --profile preview
 ```
 
-Preview build успішно зібраний: [EAS Build 3244ed92](https://expo.dev/accounts/ewgen12/projects/rn-todo-list/builds/3244ed92-bb1a-46d4-97cd-9428d474e5d5).
-Пряме посилання на APK: [Todo App Preview 4.0.0](https://expo.dev/artifacts/eas/I6mHcgByqmDZgg5bGHgaXLaE0iuPM6BcfRH0rTUn-qQ.apk).
+Preview build успішно зібраний: [EAS Build 506f18e5](https://expo.dev/accounts/ewgen12/projects/rn-todo-list/builds/506f18e5-8067-4f5d-9777-ac637bf2499b).
+Пряме посилання на APK: [Todo App Preview 4.0.0](https://expo.dev/artifacts/eas/1Bnf9qK9_apPxAJ_DoQoNw9U3ue27Gfu6y6LlnT_7gw.apk).
 
 Production builds:
 
@@ -101,7 +110,7 @@ Preview Android профіль налаштований на APK і internal dis
 npx eas-cli@latest update --platform all --environment preview --channel preview --message "UI update"
 ```
 
-Опубліковане OTA-оновлення Preview: [EAS Update group](https://expo.dev/accounts/ewgen12/projects/rn-todo-list/updates/a2bd302e-2795-4a11-9a82-58f790ef7f93).
+Опубліковане OTA-оновлення Preview: [EAS Update group](https://expo.dev/accounts/ewgen12/projects/rn-todo-list/updates/5e88385e-4e8f-448c-82a2-b606d83893d7).
 
 Закрий Preview App повністю та відкрий повторно, щоб перевірити OTA-оновлення.
 Нативні зміни потребують нової збірки; JavaScript та assets можуть оновлюватися
